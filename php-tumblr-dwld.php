@@ -30,7 +30,7 @@ ini_set('display_errors', 'Off');
 ini_set('display_startup_errors', 'Off');
 error_reporting(0);
 
-define('PAGE_LIMIT', 1000);
+define('PAGE_LIMIT', 100);
 define('URL_MASK', 'http://%s.tumblr.com/');
 define('CURRENT_PATH', dirname(__FILE__) . '/');
 
@@ -141,9 +141,16 @@ if(strlen($file) && file_exists($file))
 			    	print_message(sprintf("Start downloading %d images", count($download)));
 			    	foreach($download as $v) 
 			    	{
-			    		print_message(sprintf("Saving %s", $v['original']));
-			    		$image_file  = file_get_contents($v['original']);
-						file_put_contents($v['destination'], $image_file);
+			    		if(!file_exists($v['destination']))
+			    		{
+				    		print_message(sprintf("Saving %s", $v['original']));
+				    		$image_file  = file_get_contents($v['original']);
+							file_put_contents($v['destination'], $image_file);
+						}
+						else
+						{
+							print_message(sprintf("Already exists %s", $v['destination']));
+						}
 			    	}
 			    }
 
